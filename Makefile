@@ -4,6 +4,7 @@
 CPP = g++
 GPP_FLAGS = -c -Wall -std=c++20 -pedantic -Weffc++
 SZ=size
+BUILD_DIR = ./build
 
 # Variable for google test
 GOOGLE_TEST_LIB = gtest
@@ -12,33 +13,47 @@ GOOGLE_TEST_INCLUDE = /usr/local/include
 # Variables for Test
 T_CPP_FLAGS = $(GPP_FLAGS)  -I $(GOOGLE_TEST_INCLUDE)
 T_LD_FLAGS = -L /usr/local/lib -l $(GOOGLE_TEST_LIB) -l pthread
-T_OBJECTS = test.o string-compare.o
-TEST_P = testing
+TEST_PROG = testing
+TEST_P = $(BUILD_DIR)/$(TEST_PROG)
+T_SOURCES = \
+./test.cpp \
+./string-compare.cpp \
+
 
 # Variables for target
 OBJECTS = main.o
-TARGET = proj
+PROG = proj
+TARGET = $(BUILD_DIR)/$(PROG)
 CPP_FLAGS = $(GPP_FLAGS)
+SOURCES = \
+./main.cpp \
+
+OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES:.cpp=.o)))
+vpath %.cpp $(sort $(dir $(SOURCES)))
+
+T_OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(T_SOURCES:.cpp=.o)))
+vpath %.cpp $(sort $(dir $(T_SOURCES)))
 
 # Rules to make progam
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(BUILD_DIR) $(OBJECTS) Makefile
 	@echo "========== linking objects =========="
-	@$(CPP) -o $(TARGET) $(OBJECTS) $(LD_FLAGS)
+	@$(CPP) -o $(TARGET) $(OBJECTS)
 	@echo $(CPP): $@
+	@mv $(TARGET) ./$(PROG)
 	@$(SZ) -G $@
 
 
 clean:
-	@rm -f $(TARGET) $(TEST_P) *.o
+	@rm -f $(PROG) $(TEST_P) *.o $(BUILD_DIR)/*
 
 # Rules to make test
 # It will throw and error in case a test is failed, just ignore that
 test: $(TEST_P)
 	./$(TEST_P)
 
-$(TEST_P): $(T_OBJECTS)
+$(TEST_P): $(BUILD_DIR) $(T_OBJECTS)
 	@echo "========== linking objects =========="
 	@$(CPP) -o $(TEST_P) $(T_OBJECTS) $(T_LD_FLAGS)
 	@echo $(CPP): $@
@@ -46,10 +61,23 @@ $(TEST_P): $(T_OBJECTS)
 
 
 # Generate necessery object files
-%.o : %.cpp
+$(BUILD_DIR)/%.o : %.cpp Makefile | $(BUILD_DIR)
 	@echo $(CPP): $@
-	@$(CPP) $(CPP_FLAGS) $<
+	@$(CPP) $(CPP_FLAGS) $< -o $@
+
+# Generate build directory in case it does not exists
+$(BUILD_DIR):
+	@mkdir $@
+
+# collect rules                    
+.PHONY: all clean test info
+
+# just for debug
+
+info:
+	@echo $(OBJECTS)
+	@echo $(SOURCES)
+	@echo $(T_OBJECTS)
+	@echo $(T_SOURCES)
 
 
-                    
-.PHONY: all clean test
