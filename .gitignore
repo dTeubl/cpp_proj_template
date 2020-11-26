@@ -3,5 +3,8 @@
 *.zip
 *.o
 
+proj
+compile_commands.json
+
 build
 tags

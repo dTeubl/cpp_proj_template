@@ -5,28 +5,30 @@ CPP = g++
 GPP_FLAGS = -c -Wall -std=c++20 -pedantic -Weffc++
 SZ=size
 BUILD_DIR = ./build
+T_SOURCES_DIR = ./test
+SOURCES_DIR = ./src
+INCLUDES = ./inc
 
 # Variable for google test
 GOOGLE_TEST_LIB = gtest
 GOOGLE_TEST_INCLUDE = /usr/local/include
 
+
 # Variables for Test
-T_CPP_FLAGS = $(GPP_FLAGS)  -I $(GOOGLE_TEST_INCLUDE)
+T_CPP_FLAGS = $(GPP_FLAGS)  -I $(GOOGLE_TEST_INCLUDE) -I$(INCLUDES)
 T_LD_FLAGS = -L /usr/local/lib -l $(GOOGLE_TEST_LIB) -l pthread
 TEST_PROG = testing
 TEST_P = $(BUILD_DIR)/$(TEST_PROG)
-T_SOURCES = \
-./test.cpp \
-./string-compare.cpp \
+T_SOURCES = $(wildcard $(T_SOURCES_DIR)/*cpp)
 
 
 # Variables for target
 OBJECTS = main.o
 PROG = proj
 TARGET = $(BUILD_DIR)/$(PROG)
-CPP_FLAGS = $(GPP_FLAGS)
-SOURCES = \
-./main.cpp \
+CPP_FLAGS = $(GPP_FLAGS) -I $(INCLUDES)
+SOURCES = $(wildcard $(SOURCES_DIR)/*cpp)
+SOURCES += ./main.cpp 
 
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES:.cpp=.o)))
 vpath %.cpp $(sort $(dir $(SOURCES)))
@@ -41,12 +43,12 @@ $(TARGET): $(BUILD_DIR) $(OBJECTS) Makefile
 	@echo "========== linking objects =========="
 	@$(CPP) -o $(TARGET) $(OBJECTS)
 	@echo $(CPP): $@
-	@mv $(TARGET) ./$(PROG)
 	@$(SZ) -G $@
+	@mv $(TARGET) ./$(PROG)
 
 
 clean:
-	@rm -f $(PROG) $(TEST_P) *.o $(BUILD_DIR)/*
+	@rm -f $(PROG) $(BUILD_DIR)/*
 
 # Rules to make test
 # It will throw and error in case a test is failed, just ignore that
@@ -75,9 +77,9 @@ $(BUILD_DIR):
 # just for debug
 
 info:
-	@echo $(OBJECTS)
 	@echo $(SOURCES)
-	@echo $(T_OBJECTS)
+	@echo $(OBJECTS)
 	@echo $(T_SOURCES)
+	@echo $(T_OBJECTS)
 
 
