@@ -4,8 +4,9 @@
 class MyClass {
     public:
     unsigned int value;
+    MyClass( ) : value{0} {}
     MyClass( unsigned int val ) : value{val} {}
-    auto getValue();
+    unsigned int getValue();
 };
 
 #endif /*  _MY_CLASS_H_ */

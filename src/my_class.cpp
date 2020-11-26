@@ -1,6 +1,7 @@
 #include "my_class.h"
+#include <cstdint>
 
-auto MyClass::getValue( ) {
+unsigned int MyClass::getValue( ) {
     return this->value;
 }
 
