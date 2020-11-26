@@ -13,7 +13,6 @@ INCLUDES = ./inc
 GOOGLE_TEST_LIB = gtest
 GOOGLE_TEST_INCLUDE = /usr/local/include
 
-
 # Variables for Test
 T_CPP_FLAGS = $(GPP_FLAGS)  -I $(GOOGLE_TEST_INCLUDE) -I$(INCLUDES)
 T_LD_FLAGS = -L /usr/local/lib -l $(GOOGLE_TEST_LIB) -l pthread
@@ -21,6 +20,8 @@ TEST_PROG = testing
 TEST_P = $(BUILD_DIR)/$(TEST_PROG)
 T_SOURCES = $(wildcard $(T_SOURCES_DIR)/*cpp)
 
+T_OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(T_SOURCES:.cpp=.o)))
+vpath %.cpp $(sort $(dir $(T_SOURCES)))
 
 # Variables for target
 OBJECTS = main.o
@@ -33,10 +34,7 @@ SOURCES += ./main.cpp
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES:.cpp=.o)))
 vpath %.cpp $(sort $(dir $(SOURCES)))
 
-T_OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(T_SOURCES:.cpp=.o)))
-vpath %.cpp $(sort $(dir $(T_SOURCES)))
-
-# Rules to make progam
+# Rules 
 all: $(TARGET)
 
 $(TARGET): $(BUILD_DIR) $(OBJECTS) Makefile
@@ -74,7 +72,7 @@ $(BUILD_DIR):
 # collect rules                    
 .PHONY: all clean test info
 
-# just for debug
+# Just for debug. Place missing variables for echo here if somethings wrong
 
 info:
 	@echo $(SOURCES)
