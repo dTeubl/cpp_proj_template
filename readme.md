@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 C++ project template 
 =====================
 
@@ -13,7 +16,7 @@ Remarks
 -------
 
 + The makefile will assume that you have the necessery libraries installed. It does not check for those yet. 
-+ Place your source files to _./src_, header files to _./inc_ and test source files to _./test_ folder. In these folders, these files will be automatically compiled together in the right way.
++ Place your source files to __./src__, header files to __./inc__ and test source files to __./test__ folder. In these folders, these files will be automatically compiled together in the right way.
 + You can change the project name, and compiler setups in the Makefile
 + Feel free to suggest/add improvement
 
