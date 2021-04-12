@@ -17,3 +17,8 @@ Remarks
 + You can change the project name, and compiler setups in the Makefile
 + Feel free to suggest/add improvement
 
+Known errors
+------------
+
+When used in a fresh project, I faced the problem, that is did not compiled the tests, only after all the currently existing files was in the new project folder. Before that, adding new tests and test files was not possible.
+
