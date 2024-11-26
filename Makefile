@@ -34,6 +34,10 @@ SOURCES += ./main.cpp
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES:.cpp=.o)))
 vpath %.cpp $(sort $(dir $(SOURCES)))
 
+testFilter = "*"
+
+gTestFilter = --gtest_filter=$(testFilter)
+
 # Rules 
 all: $(TARGET)
 
@@ -51,7 +55,7 @@ clean:
 # Rules to make test
 # It will throw and error in case a test is failed, just ignore that
 test: $(TEST_P)
-	./$(TEST_P)
+	./$(TEST_P) $(gTestFilter)
 
 $(TEST_P): $(BUILD_DIR) $(T_OBJECTS)
 	@echo "========== linking objects =========="
