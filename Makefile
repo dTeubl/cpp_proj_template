@@ -15,7 +15,7 @@ GOOGLE_TEST_INCLUDE = /usr/local/include
 
 # Variables for Test
 T_CPP_FLAGS = $(GPP_FLAGS)  -I $(GOOGLE_TEST_INCLUDE) -I$(INCLUDES)
-T_LD_FLAGS = -L /usr/local/lib -l $(GOOGLE_TEST_LIB) -l pthread
+T_LD_FLAGS = -L /usr/local/lib -l $(GOOGLE_TEST_LIB) -l pthread -l gmock
 TEST_PROG = testing
 TEST_P = $(BUILD_DIR)/$(TEST_PROG)
 T_SOURCES = $(wildcard $(T_SOURCES_DIR)/*cpp)

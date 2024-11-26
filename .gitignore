@@ -2,9 +2,13 @@
 *.pdf
 *.zip
 *.o
+*.plist
+
 
 proj
 compile_commands.json
 
+
+.cache
 build
 tags
